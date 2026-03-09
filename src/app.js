@@ -13,12 +13,12 @@ mongoose
 
 // --- ENDPOINTS OBRIGATÓRIOS ---
 
-// 1. Criar um novo pedido [cite: 227]
+// 1. Criar um novo pedido
 app.post("/order", async (req, res) => {
   try {
     const data = req.body;
 
-    // Mapping dos campos (Português -> Inglês) [cite: 265, 266]
+    // Mapping dos campos (Português -> Inglês)
     const orderData = {
       orderId: data.numeroPedido,
       value: data["valor Total"],
@@ -32,7 +32,7 @@ app.post("/order", async (req, res) => {
 
     const newOrder = new Order(orderData);
     await newOrder.save();
-    res.status(201).json(newOrder); // Status 201: Created [cite: 313]
+    res.status(201).json(newOrder); // Status 201: Created
   } catch (error) {
     res
       .status(400)
@@ -40,7 +40,7 @@ app.post("/order", async (req, res) => {
   }
 });
 
-// 2. Obter dados por parâmetro na URL [cite: 228]
+// 2. Obter dados por parâmetro na URL
 app.get("/order/:orderId", async (req, res) => {
   try {
     const order = await Order.findOne({ orderId: req.params.orderId });
@@ -55,7 +55,7 @@ app.get("/order/:orderId", async (req, res) => {
 
 // --- ENDPOINTS OPCIONAIS ---
 
-// Listar todos os pedidos [cite: 230]
+// Listar todos os pedidos
 app.get("/order/list", async (req, res) => {
   try {
     const orders = await Order.find();
@@ -63,6 +63,6 @@ app.get("/order/list", async (req, res) => {
   } catch (error) {
     res.status(500).json({ mensagem: "Erro no servidor", erro: error.message });
   }
-}); // Removi a chave extra que estava aqui
+});
 
 app.listen(3000, () => console.log("Servidor rodando na porta 3000"));
