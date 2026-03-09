@@ -5,21 +5,23 @@ const Order = require("./models/Order");
 const app = express();
 app.use(express.json());
 
-// Conexão com MongoDB (Substitua pela sua string de conexão)
+// Conexão com MongoDB
 mongoose
   .connect("mongodb://localhost:27017/jitterbit_db")
   .then(() => console.log("Conectado ao MongoDB"))
   .catch((err) => console.error("Erro de conexão:", err));
 
-// [OBRIGATÓRIO] Criar um novo pedido - URL: http://localhost:3000/order
+// --- ENDPOINTS OBRIGATÓRIOS ---
+
+// 1. Criar um novo pedido [cite: 227]
 app.post("/order", async (req, res) => {
   try {
     const data = req.body;
 
-    // Mapping dos campos conforme solicitado
+    // Mapping dos campos (Português -> Inglês) [cite: 265, 266]
     const orderData = {
       orderId: data.numeroPedido,
-      value: data["valor Total"], // O JSON de entrada tem espaço no nome
+      value: data["valor Total"],
       creationDate: new Date(data.dataCriacao),
       items: data.items.map((item) => ({
         productId: parseInt(item.idItem || item.idltem),
@@ -30,7 +32,7 @@ app.post("/order", async (req, res) => {
 
     const newOrder = new Order(orderData);
     await newOrder.save();
-    res.status(201).json(newOrder); // Resposta HTTP adequada [cite: 313]
+    res.status(201).json(newOrder); // Status 201: Created [cite: 313]
   } catch (error) {
     res
       .status(400)
@@ -38,7 +40,7 @@ app.post("/order", async (req, res) => {
   }
 });
 
-// [OBRIGATÓRIO] Obter dados por parâmetro na URL [cite: 228]
+// 2. Obter dados por parâmetro na URL [cite: 228]
 app.get("/order/:orderId", async (req, res) => {
   try {
     const order = await Order.findOne({ orderId: req.params.orderId });
@@ -51,10 +53,16 @@ app.get("/order/:orderId", async (req, res) => {
   }
 });
 
-// [OPCIONAL] Listar todos os pedidos [cite: 230, 231]
+// --- ENDPOINTS OPCIONAIS ---
+
+// Listar todos os pedidos [cite: 230]
 app.get("/order/list", async (req, res) => {
-  const orders = await Order.find();
-  res.json(orders);
-});
+  try {
+    const orders = await Order.find();
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ mensagem: "Erro no servidor", erro: error.message });
+  }
+}); // Removi a chave extra que estava aqui
 
 app.listen(3000, () => console.log("Servidor rodando na porta 3000"));
