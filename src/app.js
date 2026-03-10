@@ -11,6 +11,18 @@ mongoose
   .then(() => console.log("Conectado ao MongoDB"))
   .catch((err) => console.error("Erro de conexão:", err));
 
+// --- CONFIGURAÇÃO DO BANCO (Substitua com seus dados do Atlas) ---
+const dbUser = "fernando_dev";
+const dbPass = "Fernando1520";
+const dbName = "jitterbit_db";
+
+const uri = `mongodb+srv://${dbUser}:${dbPass}@cluster0.g0olhhz.mongodb.net/${dbName}?retryWrites=true&w=majority`;
+
+mongoose
+  .connect(uri)
+  .then(() => console.log("Conectado ao MongoDB Atlas com sucesso!"))
+  .catch((err) => console.error("Erro ao conectar ao Atlas:", err));
+
 // --- ENDPOINTS OBRIGATÓRIOS ---
 
 // 1. Criar um novo pedido
