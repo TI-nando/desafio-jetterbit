@@ -7,9 +7,7 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 
-let uri =
-  process.env.MONGO_URI ||
-  "mongodb://fernando_dev:Fernando1520@cluster0-shard-00-00.g0olhhz.mongodb.net:27017,cluster0-shard-00-01.g0olhhz.mongodb.net:27017,cluster0-shard-00-02.g0olhhz.mongodb.net:27017/jitterbit_db?ssl=true&replicaSet=atlas-g0olhhz-shard-0&authSource=admin&retryWrites=true&w=majority";
+let uri = process.env.MONGO_URI;
 
 async function init() {
   try {
