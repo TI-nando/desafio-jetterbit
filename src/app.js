@@ -56,14 +56,12 @@ app.post("/order", async (req, res) => {
       orderId: String(data.numeroPedido ?? data.orderId),
       value: toNumber(pick(data, ["valor Total", "valorTotal", "value"])),
       creationDate: new Date(
-        pick(data, ["dataCriacao", "creationDate"]) ?? Date.now()
+        pick(data, ["dataCriacao", "creationDate"]) ?? Date.now(),
       ),
       items: data.items.map((item) => ({
-        productId: parseInt(
-          pick(item, ["idItem", "idltem", "productId"])
-        ),
+        productId: parseInt(pick(item, ["idItem", "idltem", "productId"])),
         quantity: toNumber(
-          pick(item, ["quantidadeItem", "quantidadeltem", "quantity"])
+          pick(item, ["quantidadeItem", "quantidadeltem", "quantity"]),
         ),
         price: toNumber(pick(item, ["valorItem", "valorltem", "price"])),
       })),
@@ -77,7 +75,7 @@ app.post("/order", async (req, res) => {
         (i) =>
           Number.isNaN(i.productId) ||
           typeof i.quantity !== "number" ||
-          typeof i.price !== "number"
+          typeof i.price !== "number",
       )
     ) {
       return res.status(400).json({ mensagem: "Dados de pedido inválidos" });
