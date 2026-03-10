@@ -12,14 +12,20 @@ Este guia explica, passo a passo, como instalar, configurar e executar a API sem
    ```bash
    npm install
    ```
-2. Verifique os scripts disponíveis:
+2. Crie o arquivo de ambiente:
+   - Na raiz do projeto, crie `.env` e, se for usar banco em memória, deixe vazio ou com:
+     ```
+     MONGO_URI=
+     ```
+   - Para Atlas ou Mongo local, preencha `MONGO_URI` conforme os modos abaixo.
+3. Verifique os scripts disponíveis:
    - Iniciar API: `npm start`
 
 ## Modos de Banco de Dados
 A API já lida com três cenários; escolha apenas um:
 
 ### 1) Banco em memória (padrão sem configuração)
-- Não defina nenhuma variável `MONGO_URI`.
+- Não defina `MONGO_URI` no `.env` (ou deixe em branco).
 - Ao iniciar, a API sobe um MongoDB em memória automaticamente (não persiste dados entre reinicializações).
 - Use este modo para desenvolvimento rápido e testes locais.
 
@@ -65,6 +71,7 @@ A API já lida com três cenários; escolha apenas um:
      MONGO_URI=mongodb+srv://USUARIO:SENHA@SEU_CLUSTER.mongodb.net/jitterbit_db?retryWrites=true&w=majority
      ```
    - Inicie com `npm start`.
+   - Importante: `.env` já está no `.gitignore` e não será versionado.
 
 ## Executar a API
 ```bash
@@ -103,6 +110,9 @@ Logs esperados:
 - Listar pedidos:
   - Método: `GET`
   - URL: `http://localhost:3000/order/list`
+- Saúde da aplicação:
+  - Método: `GET`
+  - URL: `http://localhost:3000/health` (retorna o estado da conexão com o banco)
 
 ## Testes rápidos (curl)
 - Listar:
@@ -141,6 +151,7 @@ Logs esperados:
 - Nunca versionar `.env` com credenciais.
 - Use variáveis de ambiente para segredos (MONGO_URI).
 - Em produção, prefira Atlas com rede e usuários configurados corretamente.
+- Se precisar compartilhar configuração, use um arquivo `.env.example` com placeholders (sem segredos).
 
 ## Scripts
 - `npm start`: inicia a API em `http://localhost:3000`.
